@@ -1,13 +1,18 @@
 from krita import *
+from .helper import Toolbox, Logger, ToolEnum
 
-class yuki_docker_manager(Extension):
+logger = Logger()
+
+class YukiDockerManager(Extension):
 
     def __init__(self, parent):
         # This is initialising the parent, always important when subclassing.
         super().__init__(parent)
+        self.toolbox = Toolbox()
 
     def setup(self):
         #This runs only once when app is installed
+        self.toolbox.currentToolChanged.connect(lambda x: logger.info(f"current tool changed: {x.cn_tooltip}"))
         pass
 
     def createActions(self, window):
@@ -19,4 +24,4 @@ class yuki_docker_manager(Extension):
         pass
 
 # And add the extension to Krita's list of extensions:
-Krita.instance().addExtension(yuki_docker_manager(Krita.instance())) 
+Krita.instance().addExtension(YukiDockerManager(Krita.instance())) 
