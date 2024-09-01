@@ -59,7 +59,7 @@ class ToolEnum(Enum):
             if object_name == enum.object_name:
                 return enum
         raise RuntimeError('WHAT THE FUCK?')
-
+    
 @singleton
 class Toolbox(QObject):
     def __init__(self) -> None:
@@ -70,8 +70,8 @@ class Toolbox(QObject):
 
     currentToolChanged = pyqtSignal(ToolEnum, name='currentToolChanged')
 
-    @staticmethod
     @window_cache
+    @staticmethod
     def __get_tool_buttons(window: Window) -> List[QToolButton]:
         toolbox_docker = next((i for i in window.dockers() if i.objectName() == 'ToolBox'), None)
         if toolbox_docker is None:
@@ -90,13 +90,14 @@ class Toolbox(QObject):
             if window is None:
                 raise RuntimeError("Impossible")
             
-            def set_current_tool(btn: QToolButton):
-                if not btn.isChecked():
-                    return
-                new_tool = ToolEnum.from_object_name(btn.objectName())
-                self.currentToolChanged.emit(new_tool)
             btns = Toolbox.__get_tool_buttons(window)
             for btn in btns:
+                def set_current_tool(btn: QToolButton):
+                    if not btn.isChecked():
+                        return
+                    new_tool = ToolEnum.from_object_name(btn.objectName())
+                    self.currentToolChanged.emit(new_tool)
+
                 btn.toggled.connect(partial(set_current_tool, btn))
 
             # only run me once
@@ -104,7 +105,6 @@ class Toolbox(QObject):
 
         QTimer.singleShot(0, go) # must wait the window created fully
 
-    # TODO add a "signal" for 
     @property
     def current_tool(self) -> ToolEnum:
         win = Krita.instance().activeWindow()

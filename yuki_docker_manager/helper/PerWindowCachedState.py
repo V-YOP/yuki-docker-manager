@@ -49,4 +49,6 @@ def window_cache(func):
     def wrapper(window: Window):
         return state.get(window)
     
+    setattr(wrapper, 'clear', lambda: state.clear())
+
     return wrapper
