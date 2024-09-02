@@ -15,15 +15,14 @@ MySettingType = TypeVar('T')
 
 OurSettingType = TypeVar('R')
 
-class BaseElement(ABC, Generic[OurSettingType, MySettingType]):
+class BaseElement(ABC, Generic[ MySettingType]):
     _item_classes = []
     def __init_subclass__(cls, **kwargs):
         BaseElement._item_classes.append(cls)
 
-    our_config_dataclass: Optional[OurSettingType] = None
     my_config_dataclass: Optional[MySettingType] = None
 
     @classmethod
     @abstractmethod
-    def create_me(cls, is_vertical: bool, our_setting: OurSettingType, my_setting: MySettingType) -> QWidget | QLayoutItem:
+    def create_me(cls, is_vertical: bool, my_setting: MySettingType) -> QWidget | QLayoutItem:
         ...

@@ -1,7 +1,13 @@
 from krita import *
 from typing import *
-from PyQt5.QtCore import *
+from .QtAll import *
 from time import perf_counter
+
+def display_msg_box(text: str, icon: QMessageBox.Icon):
+    box = QMessageBox()
+    box.setIcon(icon)
+    box.setText(text)
+    box.exec()
 
 def get_pixel_data(doc: Document, cb: Callable[[bytearray], None]): 
     """性能无法忍受，建议用截图"""
